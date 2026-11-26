@@ -1,0 +1,15 @@
+<ol class="route">
+  {% for step in req.steps.all %}
+  <li class="route-stop route-{{ step.status }}">
+    <div class="route-mark" aria-hidden="true"></div>
+    <div class="route-body">
+      <div class="d-flex justify-content-between flex-wrap">
+        <strong>{{ step.department.name }}</strong>
+        <span class="badge bg-{{ step.badge }}">{{ step.get_status_display }}</span>
+      </div>
+      {% if step.acted_at %}<div class="small text-muted">{{ step.acted_at|date:"j M Y, H:i" }}{% if step.officer %} by {{ step.officer.display_name }}{% endif %}</div>{% endif %}
+      {% if step.comment %}<div class="route-note">{{ step.comment }}</div>{% endif %}
+    </div>
+  </li>
+  {% endfor %}
+</ol>

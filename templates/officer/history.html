@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Past decisions{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Past decisions in {{ user.department }}</h1>
+<div class="card"><div class="table-responsive"><table class="table mb-0 align-middle">
+  <thead><tr><th>Decided</th><th>Request</th><th>Student</th><th>Outcome</th><th>By</th><th>Comment</th></tr></thead>
+  <tbody>{% for s in steps %}
+    <tr><td>{{ s.acted_at|date:"j M Y, H:i" }}</td><td>#{{ s.request.pk }}</td><td>{{ s.request.student.display_name }}</td>
+      <td><span class="badge bg-{{ s.badge }}">{{ s.get_status_display }}</span></td><td>{{ s.officer.display_name|default:"-" }}</td><td>{{ s.comment|default:"-" }}</td></tr>
+  {% empty %}<tr><td colspan="6" class="text-center text-muted py-4">No decisions recorded yet.</td></tr>{% endfor %}
+  </tbody></table></div></div>
+{% endblock %}

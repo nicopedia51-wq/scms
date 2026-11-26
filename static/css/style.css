@@ -1,0 +1,57 @@
+:root {
+  --ink: #1c2b2a; 
+  --teal: #0f3d3e;
+  --teal-2: #17595a;                                                                                                                                                                                                                                                                                                   
+  --paper: #f5f7f6;
+  --line: #d9e2e0;
+  --cleared: #1e7a4c; 
+  --stop: #b3382c;
+}
+body { background: var(--paper); 
+  color: var(--ink); 
+  font-family: "Source Sans 3", system-ui, sans-serif; 
+  line-height: 1.55; }
+h1, h2, h3, .navbar-brand { font-family: "Source Serif 4", Georgia, serif;
+   font-weight: 700; }
+ .scms-nav { background: var(--teal); }
+ .scms-nav .nav-link, .scms-nav .navbar-brand { color: #e8f1f0; }
+ .scms-nav .nav-link:hover { color: #fff; }
+ .btn-scms { background: var(--teal); 
+  color: #fff; border: 0; }
+ .btn-scms:hover, .btn-scms:focus { background: var(--teal-2); 
+  color: #fff; }
+a { color: var(--teal-2); }
+ .card { border-color: var(--line); border-radius: 6px; }
+ .table > :not(caption) > * > * { padding: .7rem .9rem; }
+ .stat-num { font-family: "Source Serif 4", Georgia, serif;
+  font-size: 2rem; 
+  font-weight: 700; 
+  color: var(--teal);
+  line-height: 1.1; }
+/* Clearance route: the page's one distinctive element - a vertical line of stops */
+.route { list-style: none; 
+  margin: 0 0 1rem; 
+  padding: 0; }
+.route-stop { position: relative; 
+  display: flex; gap: 14px;
+   padding-bottom: 14px; }
+.route-stop:not(:last-child)::before { content: ""; 
+  position: absolute; 
+  left: 8px;
+  top: 20px; 
+  bottom: 0; 
+  width: 2px; 
+  background: var(--line); }
+.route-approved:not(:last-child)::before { background: var(--cleared); }
+.route-mark { flex: 0 0 18px; height: 18px; margin-top: 3px; border-radius: 50%; border: 2px solid #9aa9a7; background: #fff; }
+.route-approved .route-mark { background: var(--cleared); 
+  border-color: var(--cleared); }
+.route-rejected .route-mark { background: var(--stop);
+  border-color: var(--stop); }
+.route-body { flex: 1; }
+.route-note { margin-top: 4px; padding: 6px 10px; 
+  background: #fff; border-left: 3px solid var(--stop); font-size: .92rem; }
+:focus-visible { outline: 3px solid #e0a800;
+  outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; 
+  animation: none !important; } }

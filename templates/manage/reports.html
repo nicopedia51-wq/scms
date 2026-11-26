@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Reports</h1>
+  <a class="btn btn-outline-secondary" href="{% url 'manage_reports_csv' %}?{{ query }}">Download CSV</a>
+</div>
+<form method="get" class="card card-body mb-4"><div class="row g-3 align-items-end">
+  {% for f in form %}<div class="col-md-3"><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</div>{% endfor %}
+  <div class="col-12"><button class="btn btn-scms">Apply filters</button> <a class="btn btn-link" href="{% url 'manage_reports' %}">Clear</a></div>
+</div></form>
+<p><strong>{{ report.total }}</strong> request{{ report.total|pluralize }} &middot; {{ report.counts.waiting }} waiting &middot; {{ report.counts.in_progress }} in progress &middot; {{ report.counts.approved }} completed &middot; {{ report.counts.rejected }} rejected</p>
+<h2 class="h5">Offices and delays</h2>
+<div class="card mb-4"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Office</th><th>Waiting now</th><th>Overdue</th><th>Average hours to decide</th></tr></thead>
+  <tbody>{% for d in report.dept_stats %}
+    <tr><td>{{ d.department.order }}. {{ d.department.name }}</td><td>{{ d.pending }}</td>
+      <td>{% if d.overdue %}<span class="badge bg-danger">{{ d.overdue }}</span>{% else %}0{% endif %}</td>
+      <td>{{ d.avg_hours|default_if_none:"-" }}</td></tr>
+  {% endfor %}</tbody></table></div></div>
+<h2 class="h5">Requests</h2>
+<div class="card"><div class="table-responsive"><table class="table mb-0 align-middle">
+  <thead><tr><th>#</th><th>Student</th><th>School</th><th>Status</th><th>Waiting at</th><th>Hours</th><th>Submitted</th></tr></thead>
+  <tbody>{% for row in report.rows %}{% with r=row.request %}
+    <tr><td><a href="{% url 'request_detail' r.pk %}">{{ r.pk }}</a></td><td>{{ r.student.display_name }}<div class="small text-muted">{{ r.student.username }}</div></td>
+      <td>{{ r.student.school }}</td><td><span class="badge bg-{{ r.badge }}">{{ r.get_status_display }}</span></td>
+      <td>{{ row.waiting_at|default:"-" }}</td><td>{{ row.waiting_hours|default_if_none:"-" }}</td><td>{{ r.created_at|date:"j M Y" }}</td></tr>
+  {% endwith %}{% empty %}<tr><td colspan="7" class="text-center text-muted py-4">No requests match these filters.</td></tr>{% endfor %}
+  </tbody></table></div></div>
+{% endblock %}

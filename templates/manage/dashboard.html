@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Clearance overview</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card card-body stat"><div class="stat-num">{{ report.counts.waiting }}</div><div class="text-muted">Waiting</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body stat"><div class="stat-num">{{ report.counts.in_progress }}</div><div class="text-muted">In progress</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body stat"><div class="stat-num">{{ report.counts.approved }}</div><div class="text-muted">Completed</div></div></div>
+  <div class="col-6 col-md-3"><div class="card card-body stat"><div class="stat-num">{{ report.counts.rejected }}</div><div class="text-muted">Rejected</div></div></div>
+</div>
+<h2 class="h5">Offices and delays</h2>
+<div class="card mb-4"><div class="table-responsive"><table class="table mb-0">
+  <thead><tr><th>Office</th><th>Waiting now</th><th>Overdue</th><th>Average hours to decide</th></tr></thead>
+  <tbody>{% for d in report.dept_stats %}
+    <tr><td>{{ d.department.order }}. {{ d.department.name }}</td><td>{{ d.pending }}</td>
+      <td>{% if d.overdue %}<span class="badge bg-danger">{{ d.overdue }}</span>{% else %}0{% endif %}</td>
+      <td>{{ d.avg_hours|default_if_none:"-" }}</td></tr>
+  {% endfor %}</tbody></table></div></div>
+
+<h2 class="h5">Latest requests</h2>
+<div class="card"><table class="table mb-0"><tbody>
+  {% for r in recent %}<tr><td><a href="{% url 'request_detail' r.pk %}">#{{ r.pk }}</a></td><td>{{ r.student.display_name }}</td>
+    <td><span class="badge bg-{{ r.badge }}">{{ r.get_status_display }}</span></td><td>{{ r.created_at|date:"j M Y" }}</td></tr>
+  {% empty %}<tr><td class="text-center text-muted py-4">No requests yet.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

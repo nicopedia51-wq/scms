@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Clearance certificate {{ cert.code }}</title>
+<style>
+  @page { size: A4 landscape; margin: 14mm; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1c2b2a; margin: 0; }
+  .frame { border: 3px double #0f3d3e; padding: 28px 40px; text-align: center; }
+  h1 { font-size: 34px; margin: 6px 0; color: #0f3d3e; letter-spacing: .5px; }
+  .sub { font-size: 15px; color: #4b5d5c; }
+  .name { font-size: 30px; margin: 18px 0 4px; border-bottom: 1px solid #9db0ae; display: inline-block; padding: 0 30px 4px; }
+  table { margin: 18px auto; border-collapse: collapse; font-size: 14px; }
+  td { padding: 4px 14px; text-align: left; border-bottom: 1px solid #dfe7e6; }
+  .stamp { display: inline-block; margin-top: 10px; padding: 6px 18px; border: 2px solid #1e7a4c; color: #1e7a4c; font-weight: bold; transform: rotate(-3deg); }
+  .code { font-family: monospace; font-size: 15px; }
+  .foot { font-size: 12px; color: #4b5d5c; margin-top: 16px; }
+  .no-print { text-align: center; margin: 12px; font-family: sans-serif; }
+  @media print { .no-print { display: none; } }
+</style></head>
+<body>
+<div class="no-print"><button onclick="window.print()">Print or save as PDF</button></div>
+<div class="frame">
+  <div class="sub">Student Clearance Management System</div>
+  <h1>Certificate of Clearance</h1>
+  <div class="sub">This certifies that</div>
+  <div class="name">{{ req.student.display_name }}</div>
+  <div class="sub">Registration number {{ req.student.username }} &middot; {{ req.student.school }}</div>
+  <p>has been cleared by every office listed below for <strong>{{ req.get_reason_display|lower }}</strong>, academic year {{ req.academic_year }}.</p>
+  <table>
+    {% for step in req.steps.all %}<tr><td>{{ step.department.name }}</td><td>Cleared {{ step.acted_at|date:"j M Y" }}</td><td>{{ step.officer.display_name }}</td></tr>{% endfor %}
+  </table>
+  <div class="stamp">CLEARED {{ req.completed_at|date:"j F Y"|upper }}</div>
+  <div class="foot">Verification code: <span class="code">{{ cert.code }}</span><br>Verify at {{ verify_url }}</div>
+</div>
+</body></html>

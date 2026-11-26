@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Awaiting decision{% endblock %}
+{% block content %}
+<h1 class="h3 mb-1">Awaiting your decision</h1>
+<p class="text-muted">{{ user.department }}{% if user.department.is_school_office %} &middot; {{ user.school }}{% endif %}</p>
+<div class="card"><div class="table-responsive"><table class="table table-hover mb-0 align-middle">
+  <thead><tr><th>Request</th><th>Student</th><th>School</th><th>Waiting since</th><th></th></tr></thead>
+  <tbody>
+  {% for step in steps %}
+    <tr><td>#{{ step.request.pk }} &middot; {{ step.request.get_reason_display }}</td>
+      <td>{{ step.request.student.display_name }}<div class="small text-muted">{{ step.request.student.username }}</div></td>
+      <td>{{ step.request.student.school }}</td>
+      <td>{{ step.activated_at|timesince }} ago</td>
+      <td class="text-end"><a class="btn btn-sm btn-scms" href="{% url 'officer_review' step.pk %}">Review</a></td></tr>
+  {% empty %}
+    <tr><td colspan="5" class="text-center text-muted py-4">Nothing is waiting for you right now.</td></tr>
+  {% endfor %}
+  </tbody></table></div></div>
+{% endblock %}

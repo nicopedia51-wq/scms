@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Audit log</h1>
+<p class="text-muted">Who did what, and when. Showing the latest 200 entries.</p>
+<div class="card"><div class="table-responsive"><table class="table mb-0 align-middle">
+  <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Request</th><th>Details</th></tr></thead>
+  <tbody>{% for l in logs %}<tr><td>{{ l.timestamp|date:"j M Y, H:i" }}</td><td>{{ l.actor.display_name|default:"System" }}</td>
+    <td>{{ l.action }}</td><td>{% if l.request %}#{{ l.request.pk }}{% endif %}</td><td>{{ l.details }}</td></tr>
+  {% empty %}<tr><td colspan="5" class="text-center text-muted py-4">Nothing logged yet.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

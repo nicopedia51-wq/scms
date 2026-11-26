@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Verify certificate{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-6">
+  <h1 class="h3 mb-3">Verify a clearance certificate</h1>
+  <form method="get" action="{% url 'verify_form' %}" class="input-group mb-4">
+    <input class="form-control" name="code" value="{{ code }}" placeholder="SCMS-XXXXXXXXXX" aria-label="Certificate code">
+    <button class="btn btn-scms">Check</button>
+  </form>
+  {% if code %}
+    {% if cert %}
+      <div class="alert alert-success"><strong>This certificate is valid.</strong><br>
+        {{ cert.request.student.display_name }} ({{ cert.request.student.username }}), {{ cert.request.student.school }}<br>
+        Cleared {{ cert.request.completed_at|date:"j F Y" }} for {{ cert.request.academic_year }}.</div>
+    {% else %}
+      <div class="alert alert-danger"><strong>Certificate not found.</strong> Check the code and try again.</div>
+    {% endif %}
+  {% endif %}
+</div></div>
+{% endblock %}

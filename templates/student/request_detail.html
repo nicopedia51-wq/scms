@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Request #{{ req.pk }}{% endblock %}
+{% block content %}
+<h1 class="h3">Request #{{ req.pk }} <span class="badge bg-{{ req.badge }} align-middle fs-6">{{ req.get_status_display }}</span></h1>
+<p class="text-muted">{{ req.student.display_name }} ({{ req.student.username }}) &middot; {{ req.student.school }} &middot; {{ req.get_reason_display }} &middot; {{ req.academic_year }}<br>
+Submitted {{ req.created_at|date:"j M Y, H:i" }}{% if req.completed_at %} &middot; cleared {{ req.completed_at|date:"j M Y, H:i" }}{% endif %}</p>
+<div class="row"><div class="col-lg-7">
+  <div class="card card-body mb-3">{% include "_tracker.html" %}</div>
+  {% if req.document %}<a class="btn btn-sm btn-outline-secondary mb-3" href="{% url 'document_download' req.pk %}">Download supporting document</a>{% endif %}
+  {% if req.status == 'approved' %}<a class="btn btn-scms mb-3" href="{% url 'certificate' req.pk %}">Download certificate</a>{% endif %}
+</div>
+{% if req.status == 'rejected' and user == req.student %}
+<div class="col-lg-5"><div class="card card-body border-danger">
+  <h2 class="h5">Fix the problem and resubmit</h2>
+  <p class="small">Resolve what the office asked for above, then send it back to the same office.</p>
+  <form method="post" action="{% url 'resubmit' req.pk %}" enctype="multipart/form-data">{% csrf_token %}
+    <div class="mb-3">{{ form.document.label_tag }}{{ form.document }}</div>
+    <button class="btn btn-scms">Resubmit request</button>
+  </form></div></div>
+{% endif %}
+</div>
+{% endblock %}

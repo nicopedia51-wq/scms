@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not allowed{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+  <h1>You can't open this page</h1>
+  <p class="text-muted">Your account does not have permission for it.</p>
+  <a class="btn btn-scms" href="{% url 'home' %}">Back to my dashboard</a>
+</div>
+{% endblock %}

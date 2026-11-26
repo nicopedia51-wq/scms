@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Officers{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Clearance officers</h1>
+<div class="row"><div class="col-lg-7 mb-4">
+  <div class="card"><div class="table-responsive"><table class="table mb-0">
+    <thead><tr><th>Username</th><th>Name</th><th>Office</th><th>School</th></tr></thead>
+    <tbody>{% for o in officers %}<tr><td>{{ o.username }}</td><td>{{ o.display_name }}</td><td>{{ o.department|default:"-" }}</td><td>{{ o.school|default:"-" }}</td></tr>
+    {% empty %}<tr><td colspan="4" class="text-center text-muted py-4">No officers yet. Add one.</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+<div class="col-lg-5"><form method="post" class="card card-body">{% csrf_token %}
+  <h2 class="h5">Add an officer</h2>
+  {% for e in form.non_field_errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+  {% for field in form %}
+    <div class="mb-3"><label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+      {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+      {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+  {% endfor %}
+  <button class="btn btn-scms">Create officer</button>
+</form></div></div>
+{% endblock %}

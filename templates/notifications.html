@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Notifications</h1>
+<div class="list-group">
+  {% for n in items %}
+    <div class="list-group-item"><div>{{ n.message }}</div><div class="small text-muted">{{ n.created_at|date:"j M Y, H:i" }}
+      {% if n.request and user.role != 'officer' %} &middot; <a href="{% url 'request_detail' n.request.pk %}">View request</a>{% endif %}</div></div>
+  {% empty %}<div class="list-group-item text-muted text-center py-4">You have no notifications.</div>{% endfor %}
+</div>
+{% endblock %}

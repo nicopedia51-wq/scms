@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Review request #{{ req.pk }}{% endblock %}
+{% block content %}
+<h1 class="h3">Review request #{{ req.pk }}</h1>
+<p class="text-muted">{{ req.student.display_name }} ({{ req.student.username }}) &middot; {{ req.student.school }} &middot; {{ req.get_reason_display }} &middot; {{ req.academic_year }}</p>
+<div class="row"><div class="col-lg-6">
+  <div class="card card-body mb-3"><h2 class="h6">Clearance progress</h2>{% include "_tracker.html" %}</div>
+  {% if req.document %}<a class="btn btn-sm btn-outline-secondary mb-3" href="{% url 'document_download' req.pk %}">Download supporting document</a>{% endif %}
+</div>
+<div class="col-lg-6">
+  {% if can_act %}
+  <form method="post" class="card card-body" id="decision-form">{% csrf_token %}
+    <h2 class="h5">Your decision for {{ step.department.name }}</h2>
+    {% for e in form.non_field_errors %}<div class="text-danger">{{ e }}</div>{% endfor %}
+    <div class="mb-3">
+      {% for radio in form.decision %}<div class="form-check">{{ radio.tag }}<label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label></div>{% endfor %}
+      {% for e in form.decision.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+    </div>
+    <div class="mb-3"><label class="form-label" for="{{ form.comment.id_for_label }}">Comment <span class="text-muted small">(required when rejecting)</span></label>{{ form.comment }}</div>
+    <button class="btn btn-scms">Save decision</button>
+  </form>
+  {% else %}
+  <div class="alert alert-secondary">You can't decide on this request now. It has either been decided already or an earlier office has not cleared it yet.</div>
+  {% endif %}
+  <a class="btn btn-link mt-2" href="{% url 'officer_dashboard' %}">Back to the list</a>
+</div></div>
+{% endblock %}

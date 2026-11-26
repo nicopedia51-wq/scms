@@ -1,0 +1,5 @@
+Django>=5.0,<5.3
+# PDF certificates (optional - the system falls back to a printable HTML page if WeasyPrint is not usable)
+WeasyPrint>=62
+# Only needed if you switch to PostgreSQL (see README):
+# psycopg2-binary>=2.9

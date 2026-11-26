@@ -56,3 +56,4 @@ python manage.py test
 Set `DJANGO_DEBUG=0`, a real `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, host behind HTTPS, run
 `python manage.py collectstatic`, and configure real SMTP (`EMAIL_BACKEND`).
 # scms
+# scms
